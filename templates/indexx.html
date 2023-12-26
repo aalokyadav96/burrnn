@@ -1,0 +1,107 @@
+
+<!DOCTYPE html>
+<html>
+{{template "head"}}
+{{template "header"}}
+
+
+	<form class="upform" enctype="multipart/form-data"  method="POST" action="/new/video" >
+		<input type="file" name="vidfile" id="myFile" onchange="myFunction()" accept="video/*">
+		<span id="filewarning"></span>
+		<div class="previewContainer" id="demo"></div>
+	</form>
+	
+<div id="noContextMenu">No Context</div>
+
+
+<script>
+	const noContext = document.getElementById("noContextMenu");
+	noContext.addEventListener("contextmenu", (e) => {
+	e.preventDefault();
+	});
+	
+</script>
+<script>
+function myFunction(){
+  var x = document.getElementById("myFile");  
+  var txt = "";
+  if ('files' in x) {
+    if (x.files.length == 0) {
+      txt = "Select one or more files.";
+    } else {
+      for (var i = 0; i < x.files.length; i++) {
+        txt += "<article class='filePreviewCon'><section class='filedesc' ><strong>" + (i+1) + ". </strong><br>";
+        var file = x.files[i];
+        if ('name' in file) {
+          txt += "<span>Name: </span><input class='inp' type='text' name='title' value='" + removeExtension(file.name) + "'><br><span>Tags: </span><input class='inp' id='inp' type='text' onfocus='getTags(this.value);' name='tags' value='' onfocusout='getTags(this.value)'><br>";
+        }
+        if ('size' in file) {
+		if (file.size > 10*1024*1024) {
+			window.alert("Size too big, select file smaller than 10 MB");
+			x.files.splice(i, 1);
+		} else {
+			txt += "size: " + formatBytes(file.size) + " bytes <br><input onclick='hideSuubmit()' type='submit' value='Submit' id='submt'/><br></section><video onmouseover='this.play();' onmouseout='this.pause();' onclick='playMe(this)' class='previewImg' src='"+ URL.createObjectURL(file) +"'></video></article>";
+		  }
+        }
+      }
+    }
+  } 
+  else {
+    if (x.value == "") {
+      txt += "Select one or more files.";
+    } else {
+      txt += "The files property is not supported by your browser!";
+      txt  += "<br>The path of the selected file: " + x.value; // If the browser does not support the files property, it will return the path of the selected file instead. 
+    }
+  }
+	document.getElementById("demo").innerHTML = txt;
+}
+
+function formatBytes(a,b=2){if(!+a)return"0 Bytes";const c=0>b?0:b,d=Math.floor(Math.log(a)/Math.log(1024));return`${parseFloat((a/Math.pow(1024,d)).toFixed(c))} ${["Bytes","KiB","MiB","GiB","TiB","PiB","EiB","ZiB","YiB"][d]}`}
+</script>
+
+<script>
+function getTags(str) {
+	var cleanedStr =  str.split(/[ ,]+/).filter(Boolean);
+//	str.split(/[ ,]+/).filter(Boolean);
+	document.getElementById('inp').value = cleanedStr.splice(0,5).join(",");
+    return 
+}
+
+function hideSubmit() {
+	document.getElementById("sbmt").style.display = "none";
+    return 
+}
+
+function hideSuubmit() {
+	document.getElementById("submt").style.display = "none";
+    return 
+}
+</script>
+<script>
+function removeExtension(filename){
+    var lastDotPosition = filename.lastIndexOf(".");
+    if (lastDotPosition === -1) return filename;
+    else return filename.substr(0, lastDotPosition);
+}
+/*
+function getTags(str) {
+	document.getElementById('inp').value =  str.split(/[ ,]+/).filter(Boolean);
+	return str.split(/[ ,]+/).filter(Boolean);
+}
+*/
+function playMe(video) {
+//    video.play();
+	                    if (video.paused) {   // play the file, and display pause symbol 
+                        video.play(); 
+                        button.textContent = "||"; 
+                    } else {              // pause the file, and display play symbol   
+                        video.pause(); 
+                        button.textContent = ">"; 
+                    } 
+}
+</script>
+
+</body>
+</html>
+

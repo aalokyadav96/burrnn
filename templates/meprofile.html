@@ -1,0 +1,22 @@
+{{template "head"}}
+{{template "header"}}
+
+
+	<img src='/userpic/{{ .UserPic }}.png'>
+	<a href="/me/edit"><button>Edit Profile</button></a><br>
+	<span>{{ .Name }}</span><br>
+	<span>{{ .Username }}</span><br>
+	<span>{{ .About }}</span><br>
+	<span>Followers</span><span>Following</span><br><hr>
+
+<div class="wraperdaper">
+   <div class="slidepanels">
+{{range .Vids}}
+      <div id="cycler" class="cycler">
+         <a href="/v/{{.}}"><img src='/poster/{{.}}.png'></a>
+      </div>
+{{end}}
+   </div>
+</div>
+
+{{template "footer"}}

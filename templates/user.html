@@ -1,0 +1,24 @@
+{{template "head"}}
+{{template "header"}}
+
+
+
+	{{ .Name }}
+	{{ .Username }}
+	{{ .About }}
+	
+	<img src='/userpic/{{ .UserPic }}.png'>
+
+<hr>
+
+<div class="wraperdaper">
+   <div class="slidepanels">
+{{range .Vids}}
+      <div id="cycler" class="cycler">
+         <a href="/v/{{.}}"><img src='/poster/{{.}}.png'></a>
+      </div>
+{{end}}
+   </div>
+</div>
+
+{{template "footer"}}
